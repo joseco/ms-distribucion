@@ -1,8 +1,10 @@
 name: SonarQube
 on:
-  push:
-    branches:
-      - main # or the name of your main branch
+  workflow_run:
+    workflows: [".NET Integration"]
+    branches: [main]
+    types: 
+      - completed
 
 jobs:
   build:
