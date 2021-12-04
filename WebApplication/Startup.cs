@@ -1,4 +1,7 @@
 using Application;
+using Application.Features.Item.AddItem;
+using CoreDDD.Event;
+using Domain.Events;
 using Infraestructure;
 using Infraestructure.Persistence;
 using Microsoft.AspNetCore.Builder;
@@ -66,6 +69,8 @@ namespace WebApplication
             {
                 endpoints.MapControllers();
             });
+            app.UseApplication();
+
         }
     }
 }

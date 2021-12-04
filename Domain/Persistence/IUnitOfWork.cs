@@ -10,5 +10,6 @@ namespace Domain.Persistence
     public interface IUnitOfWork
     {
         Task Commit(CancellationToken cancellationToken);
+        Task Commit();
     }
 }

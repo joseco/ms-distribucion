@@ -19,6 +19,11 @@ namespace Infraestructure.Persistence
 
         public async Task Commit(CancellationToken cancellationToken)
         {
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task Commit()
+        {
             await _context.SaveChangesAsync();
         }
     }

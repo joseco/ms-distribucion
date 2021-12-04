@@ -1,7 +1,10 @@
-﻿using Domain.Persistence;
+﻿using CoreDDD.Event;
+using Domain.Persistence;
 using Domain.Persistence.Repository;
 using Infraestructure.Persistence;
 using Infraestructure.Persistence.Repository;
+using Infraestructure.RabbitMq;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,9 +26,16 @@ namespace Infraestructure
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
             );
 
-            services.AddScoped<IOrdenEntregaRepository, OrdenEntregaRepository>();
-            services.AddScoped<IItemRepository, ItemRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IOrdenEntregaRepository, OrdenEntregaRepository>();
+            services.AddTransient<IItemRepository, ItemRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+
+            services.AddSingleton<IEventBus, RabbitEventBus>(sp =>
+            {
+                var scopeFactory = sp.GetRequiredService<IServiceScopeFactory>();
+                return new RabbitEventBus(sp.GetService<IMediator>(), configuration, scopeFactory);
+            });
 
             return services;
         }
